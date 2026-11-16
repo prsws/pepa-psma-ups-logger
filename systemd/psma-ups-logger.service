@@ -1,0 +1,28 @@
+[Unit]
+Description=PSMA UPS logger (NUT -> local journal -> Postgres psma.ups)
+Documentation=https://github.com/prsws/pepa-psma-ups-logger
+After=network-online.target nut-server.service docker.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=psma
+Group=psma
+EnvironmentFile=/etc/psma/ups-logger.env
+ExecStart=/usr/bin/python3 /opt/psma/ups-logger/psma_ups_logger.py
+Restart=always
+RestartSec=10
+TimeoutStopSec=20
+StateDirectory=psma/ups
+StateDirectoryMode=0750
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+PrivateDevices=true
+NoNewPrivileges=true
+ProtectKernelTunables=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+
+[Install]
+WantedBy=multi-user.target
